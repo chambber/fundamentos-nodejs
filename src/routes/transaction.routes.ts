@@ -17,7 +17,19 @@ transactionRouter.get('/', (request, response) => {
 
 transactionRouter.post('/', (request, response) => {
   try {
-    // TODO
+    const { title, value, type } = request.body;
+    const parsedValue = Number(value);
+
+    const createTransactionService = new CreateTransactionService(
+      transactionsRepository,
+    );
+    const transaction = createTransactionService.execute({
+      title,
+      value: parsedValue,
+      type,
+    });
+
+    return response.json(transaction);
   } catch (err) {
     return response.status(400).json({ error: err.message });
   }
